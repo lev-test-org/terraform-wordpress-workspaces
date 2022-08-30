@@ -1,6 +1,6 @@
 data "tfe_workspace_ids" "all_wordpress" {
   names        = ["*"]
-  tag_names = ["wordpress-aws"]
+  tag_names = [var.env]
   organization = var.organization
 }
 
