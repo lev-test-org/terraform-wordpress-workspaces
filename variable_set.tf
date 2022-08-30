@@ -34,3 +34,11 @@ resource "tfe_variable" "name" {
   description     = "tags for aws resources"
   variable_set_id = tfe_variable_set.common_vars.id
 }
+
+resource "tfe_variable" "env" {
+  key             = "env"
+  value           = var.env
+  category        = "terraform"
+  description     = "Environment name"
+  variable_set_id = tfe_variable_set.common_vars.id
+}
