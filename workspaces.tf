@@ -1,7 +1,7 @@
 resource "tfe_workspace" "wordpress-vpc" {
   name         = "${var.env}-wordpress-vpc"
   organization = var.organization
-  tag_names    = var.tfe_tags
+  tag_names    = concat(var.tfe_tags,["${var.env}"])
   auto_apply = true
   trigger_prefixes = ["vpc"]
   working_directory = "vpc"
@@ -16,7 +16,7 @@ resource "tfe_workspace" "wordpress-vpc" {
 resource "tfe_workspace" "wordpress-rds" {
   name         = "${var.env}-wordpress-rds"
   organization = var.organization
-  tag_names    = var.tfe_tags
+  tag_names    = concat(var.tfe_tags,["${var.env}"])
   auto_apply = true
   trigger_prefixes = ["rds"]
   working_directory = "rds"
@@ -35,7 +35,7 @@ resource "tfe_run_trigger" "wordpress-rds-trigger" {
 resource "tfe_workspace" "wordpress-compute" {
   name         = "${var.env}-wordpress-compute"
   organization = var.organization
-  tag_names    = var.tfe_tags
+  tag_names    = concat(var.tfe_tags,["${var.env}"])
   auto_apply = true
   trigger_prefixes = ["wordpress-compute"]
   working_directory = "wordpress-compute"
