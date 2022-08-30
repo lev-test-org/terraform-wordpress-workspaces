@@ -27,6 +27,7 @@ resource "tfe_workspace" "wordpress-rds" {
   }
   remote_state_consumer_ids = [tfe_workspace.wordpress-compute.id]
 }
+
 resource "tfe_run_trigger" "wordpress-rds-trigger" {
   workspace_id  = tfe_workspace.wordpress-rds.id
   sourceable_id = tfe_workspace.wordpress-vpc.id

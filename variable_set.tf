@@ -2,6 +2,7 @@ data "tfe_workspace_ids" "all_wordpress" {
   names        = ["*"]
   tag_names = [var.env]
   organization = var.organization
+  depends_on = [tfe_workspace.wordpress-compute,tfe_workspace.wordpress-rds,tfe_workspace.wordpress-vpc]
 }
 
 resource "tfe_variable_set" "common_vars" {
