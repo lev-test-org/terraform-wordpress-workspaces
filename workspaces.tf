@@ -1,4 +1,3 @@
-
 resource "tfe_workspace" "wordpress-vpc" {
   name         = "${var.env}-wordpress-vpc"
   organization = var.organization
@@ -12,6 +11,7 @@ resource "tfe_workspace" "wordpress-vpc" {
     oauth_token_id = "ot-V5uTyGKzPXanNBBe"
   }
   remote_state_consumer_ids = [tfe_workspace.wordpress-rds.id,tfe_workspace.wordpress-compute.id]
+  depends_on = [tfe_variable_set.common_vars]
 }
 
 resource "tfe_workspace" "wordpress-rds" {
