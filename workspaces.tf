@@ -1,3 +1,4 @@
+
 resource "tfe_workspace" "wordpress-vpc" {
   name         = "${var.env}-wordpress-vpc"
   organization = var.organization
