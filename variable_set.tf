@@ -14,7 +14,7 @@ resource "tfe_workspace_variable_set" "cred_var_set" {
     2 = tfe_workspace.wordpress-rds.id
     3 = tfe_workspace.wordpress-compute.id
   }
-  variable_set_id = data.tfe_variable_set.cred_var_set
+  variable_set_id = data.tfe_variable_set.cred_var_set.id
   workspace_id    = each.value
 }
 
