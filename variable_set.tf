@@ -3,7 +3,22 @@ resource "tfe_variable_set" "common_vars" {
   description   = "Variables shared for multiple workspaces of wordpress project"
   organization  = var.organization
 }
-resource "tfe_workspace_variable_set" "test" {
+data "tfe_variable_set" "cred_var_set" {
+  name         = "${var.cred_var_set}"
+  organization = "${var.organization}"
+}
+
+resource "tfe_workspace_variable_set" "cred_var_set" {
+  for_each = {
+    1 = tfe_workspace.wordpress-vpc.id
+    2 = tfe_workspace.wordpress-rds.id
+    3 = tfe_workspace.wordpress-compute.id
+  }
+  variable_set_id = data.tfe_variable_set.cred_var_set
+  workspace_id    = each.value
+}
+
+resource "tfe_workspace_variable_set" "common_vars" {
   for_each = {
     1 = tfe_workspace.wordpress-vpc.id
     2 = tfe_workspace.wordpress-rds.id
