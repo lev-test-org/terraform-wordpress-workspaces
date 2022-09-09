@@ -11,7 +11,7 @@ resource "tfe_workspace" "wordpress-vpc" {
     oauth_token_id = "ot-V5uTyGKzPXanNBBe"
   }
   remote_state_consumer_ids = [tfe_workspace.wordpress-rds.id,tfe_workspace.wordpress-compute.id]
-  depends_on = [tfe_variable_set.common_vars]
+  depends_on = [tfe_variable_set.common_vars,data.tfe_variable_set.cred_var_set]
 }
 
 resource "tfe_workspace" "wordpress-rds" {
@@ -27,6 +27,7 @@ resource "tfe_workspace" "wordpress-rds" {
     oauth_token_id = "ot-V5uTyGKzPXanNBBe"
   }
   remote_state_consumer_ids = [tfe_workspace.wordpress-compute.id]
+  depends_on = [tfe_workspace.wordpress-vpc]
 }
 
 resource "tfe_run_trigger" "wordpress-rds-trigger" {
@@ -46,6 +47,7 @@ resource "tfe_workspace" "wordpress-compute" {
     branch = var.branch
     oauth_token_id = "ot-V5uTyGKzPXanNBBe"
   }
+  depends_on = [tfe_workspace.wordpress-compute]
 }
 
 resource "tfe_run_trigger" "wordpress-compute-trigger" {
