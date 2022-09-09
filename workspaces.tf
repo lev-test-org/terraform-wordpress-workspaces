@@ -27,7 +27,6 @@ resource "tfe_workspace" "wordpress-rds" {
     oauth_token_id = "ot-V5uTyGKzPXanNBBe"
   }
   remote_state_consumer_ids = [tfe_workspace.wordpress-compute.id]
-  depends_on = [tfe_workspace.wordpress-vpc]
 }
 
 resource "tfe_run_trigger" "wordpress-rds-trigger" {
@@ -47,7 +46,6 @@ resource "tfe_workspace" "wordpress-compute" {
     branch = var.branch
     oauth_token_id = "ot-V5uTyGKzPXanNBBe"
   }
-  depends_on = [tfe_workspace.wordpress-compute]
 }
 
 resource "tfe_run_trigger" "wordpress-compute-trigger" {
