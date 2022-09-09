@@ -6,10 +6,11 @@ data "tfe_workspace_ids" "all_wordpress" {
 }
 
 resource "tfe_variable_set" "common_vars" {
-  name          = "Wordpress vars"
+  name          = "Wordpress vars ${env}"
   description   = "Variables shared for multiple workspaces of wordpress project"
   organization  = var.organization
-  workspace_ids = length(data.tfe_workspace_ids.all_wordpress) == 0 ? [""] : values(data.tfe_workspace_ids.all_wordpress.ids)
+  //workspace_ids = length(data.tfe_workspace_ids.all_wordpress) == 0 ? [""] : values(data.tfe_workspace_ids.all_wordpress.ids)
+  workspace_ids = [tfe_workspace.wordpress-compute.id,tfe_workspace.wordpress-rds.id,tfe_workspace.wordpress-vpc.id ]
 }
 
 resource "tfe_variable" "vpc_cidr" {
