@@ -5,6 +5,7 @@ resource "tfe_workspace" "wordpress-vpc" {
   auto_apply = true
   trigger_prefixes = ["vpc"]
   working_directory = "vpc"
+  variable_set_id = tfe_variable_set.common_vars.id
   vcs_repo  {
     identifier = "lev-test-org/wordpress-aws"
     branch = var.branch
@@ -20,6 +21,7 @@ resource "tfe_workspace" "wordpress-rds" {
   auto_apply = true
   trigger_prefixes = ["rds"]
   working_directory = "rds"
+  variable_set_id = tfe_variable_set.common_vars.id
   vcs_repo  {
     identifier = "lev-test-org/wordpress-aws"
     branch = var.branch
@@ -40,6 +42,7 @@ resource "tfe_workspace" "wordpress-compute" {
   auto_apply = true
   trigger_prefixes = ["wordpress-compute"]
   working_directory = "wordpress-compute"
+  variable_set_id = tfe_variable_set.common_vars.id
   vcs_repo  {
     identifier = "lev-test-org/wordpress-aws"
     branch = var.branch

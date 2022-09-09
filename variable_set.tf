@@ -1,17 +1,7 @@
-data "tfe_workspace_ids" "all_wordpress" {
-  names        = ["*"]
-  tag_names = [var.env]
-  organization = var.organization
-  depends_on = [tfe_workspace.wordpress-compute,tfe_workspace.wordpress-rds,tfe_workspace.wordpress-vpc]
-}
-
 resource "tfe_variable_set" "common_vars" {
   name          = "Wordpress vars ${var.env}"
   description   = "Variables shared for multiple workspaces of wordpress project"
   organization  = var.organization
-  //workspace_ids = length(data.tfe_workspace_ids.all_wordpress) == 0 ? [""] : values(data.tfe_workspace_ids.all_wordpress.ids)
- // replacing datasource to specific before tryig to iterate
-  workspace_ids = [tfe_workspace.wordpress-compute.id,tfe_workspace.wordpress-rds.id,tfe_workspace.wordpress-vpc.id ]
 }
 
 resource "tfe_variable" "vpc_cidr" {
