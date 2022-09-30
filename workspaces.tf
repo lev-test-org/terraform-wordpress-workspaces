@@ -26,7 +26,7 @@ resource "tfe_workspace" "wordpress-rds" {
     branch = var.branch
     oauth_token_id = "ot-V5uTyGKzPXanNBBe"
   }
-  remote_state_consumer_ids = [tfe_workspace.wordpress-compute[*].id]
+  remote_state_consumer_ids = [for tfe_cp_id in tfe_workspace.wordpress-compute: tfe_cp_id.id ]
 }
 
 resource "tfe_run_trigger" "wordpress-rds-trigger" {
