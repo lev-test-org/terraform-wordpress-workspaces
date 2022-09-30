@@ -9,13 +9,13 @@ data "tfe_variable_set" "cred_var_set" {
 }
 
 resource "tfe_workspace_variable_set" "cred_var_set" {
-  for_each = concat([tfe_workspace.wordpress-vpc.id,tfe_workspace.wordpress-rds.id],[ for cp in var.compute_groups : tfe_workspace.wordpress-compute[cp].id])
+  for_each = toset(concat([tfe_workspace.wordpress-vpc.id,tfe_workspace.wordpress-rds.id],[ for cp in var.compute_groups : tfe_workspace.wordpress-compute[cp].id]))
   variable_set_id = data.tfe_variable_set.cred_var_set.id
   workspace_id    = each.value
 }
 
 resource "tfe_workspace_variable_set" "common_vars" {
-  for_each = concat([tfe_workspace.wordpress-vpc.id,tfe_workspace.wordpress-rds.id],[ for cp in var.compute_groups : tfe_workspace.wordpress-compute[cp].id ])
+  for_each = toset(concat([tfe_workspace.wordpress-vpc.id,tfe_workspace.wordpress-rds.id],[ for cp in var.compute_groups : tfe_workspace.wordpress-compute[cp].id]))
   variable_set_id = tfe_variable_set.common_vars.id
   workspace_id    = each.value
 }
