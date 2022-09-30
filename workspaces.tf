@@ -10,7 +10,7 @@ resource "tfe_workspace" "wordpress-vpc" {
     branch = var.branch
     oauth_token_id = "ot-V5uTyGKzPXanNBBe"
   }
-  remote_state_consumer_ids = [tfe_workspace.wordpress-rds.id,tfe_workspace.wordpress-compute.id]
+  remote_state_consumer_ids = [tfe_workspace.wordpress-rds.id,tfe_workspace.wordpress-compute[*].id]
   depends_on = [tfe_variable_set.common_vars,data.tfe_variable_set.cred_var_set]
 }
 
@@ -26,7 +26,7 @@ resource "tfe_workspace" "wordpress-rds" {
     branch = var.branch
     oauth_token_id = "ot-V5uTyGKzPXanNBBe"
   }
-  remote_state_consumer_ids = [tfe_workspace.wordpress-compute.id]
+  remote_state_consumer_ids = [tfe_workspace.wordpress-compute[*].id]
 }
 
 resource "tfe_run_trigger" "wordpress-rds-trigger" {
@@ -35,12 +35,13 @@ resource "tfe_run_trigger" "wordpress-rds-trigger" {
 }
 
 resource "tfe_workspace" "wordpress-compute" {
-  name         = "${var.env}-wordpress-compute"
+  for_each = toset(var.compute_groups)
+  name         = "${var.env}-wordpress-compute-blue"
   organization = var.organization
   tag_names    = concat(var.tfe_tags,["${var.env}"])
   auto_apply = true
-  trigger_prefixes = ["wordpress-compute"]
-  working_directory = "wordpress-compute"
+  trigger_prefixes = ["wordpress-compute-blue"]
+  working_directory = "wordpress-compute-blue"
   vcs_repo  {
     identifier = "lev-test-org/wordpress-aws"
     branch = var.branch
@@ -49,6 +50,7 @@ resource "tfe_workspace" "wordpress-compute" {
 }
 
 resource "tfe_run_trigger" "wordpress-compute-trigger" {
-  workspace_id  = tfe_workspace.wordpress-compute.id
+  for_each = toset(var.compute_groups)
+  workspace_id  = each
   sourceable_id = tfe_workspace.wordpress-rds.id
 }
