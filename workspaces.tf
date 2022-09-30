@@ -36,12 +36,12 @@ resource "tfe_run_trigger" "wordpress-rds-trigger" {
 
 resource "tfe_workspace" "wordpress-compute" {
   for_each = toset(var.compute_groups)
-  name         = "${var.env}-wordpress-compute-blue"
+  name         = "${var.env}-wordpress-compute-${each.key}"
   organization = var.organization
   tag_names    = concat(var.tfe_tags,["${var.env}"])
   auto_apply = true
-  trigger_prefixes = ["wordpress-compute-blue"]
-  working_directory = "wordpress-compute-blue"
+  trigger_prefixes = ["wordpress-compute-${each.key}"]
+  working_directory = "wordpress-compute-${each.key}"
   vcs_repo  {
     identifier = "lev-test-org/wordpress-aws"
     branch = var.branch
@@ -51,6 +51,6 @@ resource "tfe_workspace" "wordpress-compute" {
 
 resource "tfe_run_trigger" "wordpress-compute-trigger" {
   for_each = toset(var.compute_groups)
-  workspace_id  = each
+  workspace_id  = tfe_workspace.wordpress-compute[each].id
   sourceable_id = tfe_workspace.wordpress-rds.id
 }
