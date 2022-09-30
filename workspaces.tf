@@ -10,7 +10,7 @@ resource "tfe_workspace" "wordpress-vpc" {
     branch = var.branch
     oauth_token_id = "ot-V5uTyGKzPXanNBBe"
   }
-  remote_state_consumer_ids = [tfe_workspace.wordpress-rds.id,tfe_workspace.wordpress-compute[*].id]
+  remote_state_consumer_ids = concat([tfe_workspace.wordpress-rds.id],[for tfe_cp_id in tfe_workspace.wordpress-compute: tfe_cp_id.id])
   depends_on = [tfe_variable_set.common_vars,data.tfe_variable_set.cred_var_set]
 }
 
