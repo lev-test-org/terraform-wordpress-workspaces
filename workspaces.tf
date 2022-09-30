@@ -51,6 +51,6 @@ resource "tfe_workspace" "wordpress-compute" {
 
 resource "tfe_run_trigger" "wordpress-compute-trigger" {
   for_each = toset(var.compute_groups)
-  workspace_id  = tfe_workspace.wordpress-compute[each].id
+  workspace_id  = tfe_workspace.wordpress-compute[each.value].id
   sourceable_id = tfe_workspace.wordpress-rds.id
 }
